@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<title>Онлайн-тренажер алгоритма Полига-Хеллмана</title>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="styles/style.css">	
+	</head>
+
+<body>
+	<header>
+		<div id = "logo">Тренажер алгоритма Полига-Хеллмана</div>
+		<div id = "additions_links">
+			<ul>
+				<li><a href="https://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D0%9F%D0%BE%D0%BB%D0%B8%D0%B3%D0%B0_%E2%80%94_%D0%A5%D0%B5%D0%BB%D0%BB%D0%BC%D0%B0%D0%BD%D0%B0">Алгоритм в википедии</a></li>
+				<li><a href="https://github.com/koskacss/DHalgorithm">Реализация протокола Диффи-Хеллмана</a></li>
+				<li><a href="index.html">Демонстрация протокола Диффи-Хеллмана</a></li>
+			</ul>
+		</div>
+	</header>
+	<div class = "container">
+		<div class="part">
+		<h1 style="text-align: center;">Внимание! В данный момент тренажер находится в бета версии, поэтому возможны некоторые ошибки</h1>
+			<h2>Онлайн-тренажер</h2>
+			<p>Данный тренажер предназначен для изучения и закрепления навыков вычисления дискретного логарифма с помощью алгоритма Полига-Хеллмана</p>
+			<p>Для реализации алгоритма были использованы следующие алгоритмы:</p>
+			<p>
+			<ul>
+				<li>1) Решето Эратосфена</li>
+				<li>2) Алгоритм быстрого возведения в степень по модулю</li>
+				<li>3) Алгоритм поиска первообразных корней</li>
+				<li>4) Китайская теорема об остатках</li>
+			</ul>
+			</p>
+			<p>Чтобы запустить тренажер нажмите кнопку начать и начните выполнять задания</p>
+		</div>
+		<div class="part">
+			<h2>Об алгоритме</h2>
+			<p>Алгоритм Полига-Хеллмана - детерминированный алгоритм дискретного логарифмирования в кольце вычетов по модулю простого числа. Одной из особенностей алгоритма является то, что для простых чисел специального вида можно находить дискретный логарифм за полиномиальное время. Данный алгоритм был придуман математиком Роландом Сильвером, но впервые был опубликован другими двумя американскими математиками Стивеном Полигом и Мартином Хеллманом в 1978 году в статье "An improved algorithm for computing logarithms over GF(p) and its cryptographic significance", которые независимо от Роланда Сильвера разработали данный алгоритм</p>
+		</div>
+		<div class="part">
+			<h2>Идея алгоритма</h2>
+			<p>Пусть задано сравнение:
+				<p>
+				<img src="img/formula1.svg" alt="">
+				</p>
+				<p>и известно разложение числа p-1 на простые множители:</p>
+				<p>
+					<img src="img/formula2.svg" alt="">
+				</p>
+				Необходимо найти число <img src="img/formula3.svg" alt="">, удовлетворяющее исходному сравнению
+				<p>Суть алгоритма в том, что достаточно найти <img src="img/formula4.svg" alt=""> по модулям <img src="img/formula5.svg" alt=""> для всех i, а затем решение исходного сравнения можно найти с помошью китайской теоремы об остатках.
+				<p>Чтобы найти <img src="img/formula4.svg" alt=""> по каждому из таких модулей, нужно решить сравнение:
+				<p><img src="img/formula6.svg" alt=""></p>
+				</p>
+			</p>
+		</div>
+	</div>
+	<div class="container">
+		<h2 style = "text-align: center;padding-top:25px">Интерактивный тренажер алгоритма Полига-Хеллмана</h2>
+		<div id = "trainer">
+			<button id = "start" onclick="start_trainer()">Начать</button>
+
+			<div id = "trainer_inner">
+				<p>Вычислите следующий дискретный логарифм ind_	<span id = "base"></span>(<span id = "equal"></span>) in GF(<span id = "prime">5</span>)</p>
+				<p><span id = "result"></span></p>
+			</div>
+
+			<input type="text" placeholder="Ваш ответ" id = "user_answer">
+			<button id = "send_answer" onclick = "checkAnswer()">Ответить</button>
+		</div>
+	</div>
+	<script src = scripts/trainer.js></script>
+	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>

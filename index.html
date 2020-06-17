@@ -1,0 +1,104 @@
+<html>
+	<head>
+		<title>Демонстрация протокола Диффи - Хеллмана</title>
+		<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="styles/style.css">	
+	</head>
+
+<body>
+	<header>
+		<div id = "logo">Демонстрация работы протокола Диффи - Хеллмана</div>
+		<div id = "additions_links">
+			<ul>
+				<li><a href="https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB_%D0%94%D0%B8%D1%84%D1%84%D0%B8_%E2%80%94_%D0%A5%D0%B5%D0%BB%D0%BB%D0%BC%D0%B0%D0%BD%D0%B0">Протокол в википедии</a></li>
+				<li><a href="https://github.com/koskacss/DHalgorithm">Реализация протокола Диффи-Хеллмана</a></li>
+				<li><a href="Pohlig.html">Тренажер Поллига-Хеллмана</a></li>
+			</ul>
+		</div>
+	</header>
+	<div class = "container">
+		<div class="part">
+			<h2>Демонстрация работы протокола</h2>
+			<p>Данная страница предназначена для демонстрации работы протокола Диффи - Хеллмана</p>
+			<p>Для реализации протокола были использованы следующие алгоритмы:</p>
+			<p>
+			<ul>
+				<li>1) Решето Эратосфена</li>
+				<li>2) Алгоритм быстрого возведения в степень по модулю</li>
+				<li>3) Алгоритм поиска первообразных корней</li>
+			</ul>
+			</p>
+			<p>Чтобы запустить демонстрацию нажмите на кнопку "Сгенерировать параметры p и g", а затем следуйте инструкции</p>
+		</div>
+		<div class="part">
+			<h2>Несколько слов про протокол</h2>
+			<p>Протокол Ди́ффи — Хе́ллмана (англ. Diffie–Hellman, DH) — криптографический протокол, позволяющий двум и более сторонам получить общий секретный ключ, используя незащищенный от прослушивания канал связи. Полученный ключ используется для шифрования дальнейшего обмена с помощью алгоритмов симметричного шифрования.
+
+			<p>Схема открытого распределения ключей, предложенная Диффи и Хеллманом, произвела настоящую революцию в мире шифрования, так как снимала основную проблему классической криптографии — проблему распределения ключей.</p>
+
+			<p>В чистом виде алгоритм Диффи — Хеллмана уязвим для модификации данных в канале связи, в том числе для атаки «Man-in-the-middle (человек посередине)», поэтому схемы с его использованием применяют дополнительные методы односторонней или двусторонней аутентификации.</p>
+		</div>
+		<div class="part">
+			<h2>Описание алгоритма</h2>
+			<p>
+				Предположим, существует два абонента: Алиса и Боб. Обоим абонентам известны некоторые два числа p и g, которые не являются секретными и могут быть известны также другим заинтересованным лицам. Для того, чтобы создать неизвестный более никому секретный ключ, оба абонента генерируют большие случайные числа: Алиса — a, Боб — число b. Затем Алиса вычисляет остаток от деления:
+				$$A = g^a (mod p).$$
+				и пересылает его Бобу, а Боб вычисляет остаток от деления:
+				$$B = g^b (mod p).$$
+				и передаёт Алисе. Предполагается, что злоумышленник может получить оба этих значения, но не модифицировать их (то есть, у него нет возможности вмешаться в процесс передачи).
+
+				На втором этапе Алиса на основе имеющегося у неё a и полученного по сети B вычисляет значение:
+				$$B^a (mod p) = g^{ab} (mod p).$$
+				Боб на основе имеющегося у него b и полученного по сети A вычисляет значение:
+				$$A^b (mod p) = g^{ab} (mod p).$$
+				Как нетрудно видеть, у Алисы и Боба получилось одно и то же число:
+				$$K = g^{ab} (mod p).$$
+				<span style = "text-decoration: underline;">Его они и могут использовать в качестве секретного ключа</span>
+			</p>
+		</div>
+	</div>
+	<div class="container">
+		<h2 style = "text-align: center;padding-top:25px">Демонстрация работы протокола Диффи - Хеллмана</h2>
+		<div id = "demo_difie">
+			<div id = "demo_difie_inner">
+				<div class = "user_computer">
+					<h3>Компьютер Алисы</h3>
+					<label>Параметр p: </label><input type="text" readonly="" id = "param_p_alice">
+					<label>Параметр g: </label><input type="text" readonly="" id = "param_g_alice">
+					<button onclick = "generate_params()" id = "generate_button">Сгенерировать параметры</button>
+					<button id = "send" onclick = "send_params()">Отправить параметры Бобу</button>
+					<button id = "generate_private_keys" onclick = "generate_private_keys()">Сгенерировать приватные ключи</button>
+					<span id = "private_alice"><label>Приватный ключ: </label><input type="text" readonly="" id = "private_alice_inp"></span>
+					<button id = "generate_public_keys" onclick = "calculate_public_keys()">Вычислить публичные ключи и совершить обмен</button>
+					<span id = "public_bob"><label>Ключ Боба: </label><input type="text" readonly="" id = "private_bob_inp_a"></span>
+					<button id = "calculate_final_key" onclick = "calculate_final_key()">Получить финальный ключ</button>
+					<span id = "final_alice"><label>Финальный ключ: </label><input type="text" readonly="" id = "final_a"></span>
+				</div>
+		
+
+				<div class = "user_computer">
+					<h3>Компьютер Боба</h3>
+					<span id = "bobs_params">
+						<label>Параметр p: </label><input type="text" readonly="" id = "param_p_bob">
+						<label>Параметр g: </label><input type="text" readonly="" id = "param_g_bob">
+					</span>
+						<span id = "private_bob"><label>Приватный ключ: </label><input type="text" readonly="" id = "private_bob_inp"></span>
+						<span id = "public_alice"><label>Ключ Алисы: </label><input type="text" readonly="" id = "private_alice_inp_b"></span>
+						<span id = "final_bob"><label>Финальный ключ: </label><input type="text" readonly="" id = "final_b"></span>
+				</div>
+
+				<div id = "logging">
+					
+				</div>
+
+				<button onclick = "refresh()" id = "refresh">
+					Очистить и начать заново
+				</button>
+			</div>
+		</div>
+	</div>
+	<script src = scripts/demo.js></script>
+	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+</html>
