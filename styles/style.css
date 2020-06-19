@@ -209,3 +209,22 @@ header #additions_links a:hover{
 #trainer_inner{
 	display: none;
 }
+
+#show_answer{
+	width:90%;
+	margin:0 auto;
+	margin-top:25px;
+	display: none;
+}
+
+#show_answer h2{
+	margin-top:25px;
+}
+
+#show_answer p {
+	margin-top:10px;
+}
+
+#show_answer h3{
+	margin-top:20px;
+}

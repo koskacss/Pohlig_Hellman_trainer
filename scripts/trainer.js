@@ -1,6 +1,6 @@
 window.onload = () => {
 
-	var a,b,mod,answer;
+	var a,b,mod,answer,equals = [], equals_mod = [];
 
 	sieve_of_eratosthenes = (max) => {
 	
@@ -76,12 +76,21 @@ window.onload = () => {
 		
 		let random_answer = Math.floor(Math.random() * 100);
 
+		while((random_answer == 0) || (typeof random_answer == 'undefined')) {
+			random_answer = Math.floor(Math.random() * 100);
+		}
+
+		random_answer = random_answer % p;
+
 		return powmod(primitive,random_answer,p);
 	}
 
 	start_trainer = () =>{
 
-		let start_button = document.getElementById("start"),
+		let show_calcs_qs = document.getElementById('calcs_qs'),
+			show_table = document.getElementById('show_table'),
+			div_help = document.getElementById('show_answer'),
+			start_button = document.getElementById("start"),
 			trainer_inner = document.getElementById("trainer_inner"),
 			prime = document.getElementById('prime'),
 			base = document.getElementById('base'),
@@ -89,6 +98,12 @@ window.onload = () => {
 			array_of_primes = sieve_of_eratosthenes(100),
 			random_index = Math.floor(Math.random() * 100),
 			p,primitive,equal;
+
+		equals = [];
+		equals_mod = [];
+		show_table.innerHTML = '';
+		show_calcs_qs.innerHTML = '';
+
 
 		for(let k = 0; k <= random_index; k++){
 			if(array_of_primes[k] == 1) {
@@ -98,7 +113,6 @@ window.onload = () => {
 
 		primitive = get_primitive_root(p);
 		equal = generate_answer(primitive,p);
-
 
 		a = primitive;
 		b = equal;
@@ -110,7 +124,8 @@ window.onload = () => {
 
 		start_button.style.display = "none";
 		trainer_inner.style.display = "block";
-	
+		div_help.style.display = "none";
+
 		answer = pohlig_alg();
 
 	}
@@ -120,11 +135,12 @@ window.onload = () => {
 			res = document.getElementById('result');
 
 		if(user_answer.value == answer){
-			res.innerHTML = "Верно!";
+			alert("Верно");
 			start_trainer();
 			user_answer.value = "";
 		} else {
-			res.innerHTML = "Неверно!";
+			alert("Неверно");
+			user_answer.value = "";
 		}
 	}
 
@@ -198,35 +214,32 @@ window.onload = () => {
 
 	get_reverse_num = (num, m) => {
 
-		let r = [];
-		r[0] = 0;
+		let numerator = 1;
 
-		r[1] = 1;
+		while((numerator % num) != 0){
+			numerator+=m;
+		}
 
-		num = num % m;
-
-		for (let i = 2; i < m; i++)
-			r[i] = (m - Math.floor(m/i) * r[m%i] % m) % m;
-
-		return r[num];
+		return numerator / num;
 	}
 
 	calc_res_for_q = (q,alpha,table_q) => {
 
-		let exp, tmp, prev_x,rev, res = 0,module;
+		let exp, tmp, prev_x,rev, res = 0,module, sum_prev = 0;
 
 		exp = (mod - 1) / (q);
 		tmp = powmod(b,exp,mod);
 		prev_x = find_in_table(tmp, table_q)
+		sum_prev+=prev_x;
 
 		res = prev_x;
 
-
 		for(let i = 1; i < alpha; i++){
 			exp = (mod - 1) / (q ** (i+1));
-			rev = get_reverse_num(powmod(a,prev_x,mod),mod);
+			rev = get_reverse_num(powmod(a,sum_prev,mod),mod);
 			tmp = powmod((b*rev % mod),exp,mod);
 			prev_x = find_in_table(tmp, table_q);
+			sum_prev = sum_prev  + (prev_x * q**i);
 			res = res + prev_x * (q ** i);
 		}
 
@@ -235,28 +248,24 @@ window.onload = () => {
 		return {res: res, module: module};
 	}
 
-	chinese_remainder_theorem = (eqv) => {
+	chinese_remainder_theorem = () => {
 		let x = 0,M = 1, Mis = [],keys = [],values = [], Mis_neg = [];
 
-		for(let key of eqv.keys()){
-			keys.push(key);
+		for(let i = 0; i < equals_mod.length; i++){
+			M*=equals_mod[i];
 		}
 
-		for(let val of eqv.values()){
-			M*=val;
-			values.push(val);
+
+		for(let i = 0; i < equals.length; i++){
+			Mis[i] = M / equals_mod[i];
 		}
 
-		for(let i = 0; i < eqv.size; i++){
-			Mis[i] = M / values[i];
+		for(let i = 0; i < equals.length; i++){
+			Mis_neg[i] = get_reverse_num(Mis[i], equals_mod[i]);
 		}
 
-		for(let i = 0; i < eqv.size; i++){
-			Mis_neg[i] = get_reverse_num(Mis[i], values[i]);
-		}
-
-		for(let i = 0; i < eqv.size; i++){
-			x = x + keys[i] * Mis[i] * Mis_neg[i];
+		for(let i = 0; i < equals.length; i++){
+			x = x + equals[i] * Mis[i] * Mis_neg[i];
 		}
 
 		return x % M;
@@ -265,21 +274,76 @@ window.onload = () => {
 
 	pohlig_alg = () => {
 
-		let phi,factors = [], qs = [],table = [],i, eqv = new Map(), answer,calcs;
+		let phi,factors = [], qs = [],table = [],i,calcs, tmp1,tmp2;
 
 		phi = mod - 1;
 
 		factors = factorise(phi);
+
 		qs = get_qs(phi);
 
 		for(i = 0; i < qs.length; i++){
 			table = calc_table_for_q(qs[i]);
-			eqv.set(calc_res_for_q(qs[i],get_alphaq(qs[i],factors),table).res, calc_res_for_q(qs[i],get_alphaq(qs[i],factors),table).module);
+			tmp1 = calc_res_for_q(qs[i], get_alphaq(qs[i],factors),table).res;
+			equals.push(tmp1);
+			tmp2 = calc_res_for_q(qs[i], get_alphaq(qs[i],factors),table).module;
+			equals_mod.push(tmp2);
 		}
 
-		calcs = chinese_remainder_theorem(eqv);
+		calcs = chinese_remainder_theorem();
 
 		return calcs;
 	}
+
+	Show_help = () => {
+		let wolfram = document.getElementById('wolfram'),
+			div_help = document.getElementById('show_answer'),
+			param_a = document.getElementById('show_a'),
+			param_b = document.getElementById('show_b'),
+			param_p = document.getElementById('show_mod'),
+			factors = document.getElementById('show_factors'),
+			div_table = document.getElementById('show_table'),
+			div_qs = document.getElementById('calcs_qs'),
+			param_answer = document.getElementById('get_answer'),
+			table,qs = [],factors_arr,alphas = [], eqv = new Map(),vals = [],keys = [],link = '';
+
+			factors_arr = factorise(mod-1);
+
+			qs = get_qs(mod-1);
+
+			for(let i = 0; i < qs.length; i++){
+				table = calc_table_for_q(qs[i]);
+				alphas = get_alphaq(qs[i] , factors_arr);
+
+				for(let j = 0; j < table.length; j++){
+					let paragraph = document.createElement("p");
+					paragraph.innerHTML = 'R[' + qs[i]+ ',' + j + "]" + ' = ' + table[j];
+					div_table.appendChild(paragraph);
+				}
+				
+			}
+
+			for(let i = 0; i < qs.length; i++){
+
+				let h3 = document.createElement("h3");
+				let paragraph = document.createElement("p");
+
+				h3.innerHTML = "Для q = " + qs[i] + ":";
+				paragraph.innerHTML = "x = " + equals[i] + " (mod " + equals_mod[i] + ")";
+
+				div_qs.appendChild(h3);
+				div_qs.appendChild(paragraph);
+			}
+
+			param_a.innerHTML = a;
+			param_b.innerHTML = b;
+			param_p.innerHTML = mod;
+			factors.innerHTML = factors_arr.toString();
+			div_help.style.display = "block";
+
+			param_answer.innerHTML = answer;
+			link = "https://www.wolframalpha.com/input/?i=" + a + "%5Ex+%3D" + b +"mod+" + mod;
+			wolfram.setAttribute("href", link);
+	} 
 
 }

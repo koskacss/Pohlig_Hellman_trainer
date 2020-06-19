@@ -18,7 +18,6 @@
 	</header>
 	<div class = "container">
 		<div class="part">
-		<h1 style="text-align: center;">Внимание! В данный момент тренажер находится в бета версии, поэтому возможны некоторые ошибки</h1>
 			<h2>Онлайн-тренажер</h2>
 			<p>Данный тренажер предназначен для изучения и закрепления навыков вычисления дискретного логарифма с помощью алгоритма Полига-Хеллмана</p>
 			<p>Для реализации алгоритма были использованы следующие алгоритмы:</p>
@@ -62,14 +61,30 @@
 			<div id = "trainer_inner">
 				<p>Вычислите следующий дискретный логарифм ind_	<span id = "base"></span>(<span id = "equal"></span>) in GF(<span id = "prime">5</span>)</p>
 				<p><span id = "result"></span></p>
+				<button id = "help" onclick = "Show_help()">Показать решение</button>
 			</div>
 
 			<input type="text" placeholder="Ваш ответ" id = "user_answer">
 			<button id = "send_answer" onclick = "checkAnswer()">Ответить</button>
+
+		</div>
+		
+		<div id = "show_answer">
+			<h2>Исходные данные</h2>
+			<p>Сгенерированные параметры: a = <span id = "show_a"></span>, b = <span id = "show_b"></span>,  p = <span id = "show_mod"></span></p>
+			<p>p - 1 раскладывается на такие простые множители: <span id = "show_factors"></span></p>
+			<h2>Вычисление таблицы</h2>
+			<div id = "show_table"></div>
+			<h2>Рассматриваем каждый qi</h2>
+			<div id = "calcs_qs"></div>
+			<h2>Получение ответа:</h2>
+			<p>Применяя китайскую теорему об остатках, получаем ответ: <span id = "get_answer"></span></p>
+			<p><a href="" id = "wolfram" target="_blank">Проверить пример в WolframAlpha</a></p>
 		</div>
 	</div>
 	<script src = scripts/trainer.js></script>
-	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </body>
 
 </html>
