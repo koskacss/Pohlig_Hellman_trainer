@@ -9,6 +9,15 @@ input{
 	height:25px;
 }
 
+button{
+	outline:none;
+	border:none;
+
+}
+
+button:hover{
+	background-color: #c0c0c0;
+}
 
 .clear{
 	clear:all;
@@ -227,4 +236,10 @@ header #additions_links a:hover{
 
 #show_answer h3{
 	margin-top:20px;
+}
+
+#help{
+	width:150px;
+	height:40px;
+	margin-top:25px;
 }

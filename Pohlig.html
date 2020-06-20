@@ -25,8 +25,7 @@
 			<ul>
 				<li>1) Решето Эратосфена</li>
 				<li>2) Алгоритм быстрого возведения в степень по модулю</li>
-				<li>3) Алгоритм поиска первообразных корней</li>
-				<li>4) Китайская теорема об остатках</li>
+				<li>3) Китайская теорема об остатках</li>
 			</ul>
 			</p>
 			<p>Чтобы запустить тренажер нажмите кнопку начать и начните выполнять задания</p>
@@ -50,6 +49,9 @@
 				<p>Чтобы найти <img src="img/formula4.svg" alt=""> по каждому из таких модулей, нужно решить сравнение:
 				<p><img src="img/formula6.svg" alt=""></p>
 				</p>
+				<p>Стоит отметить, что решения для данных сравнений обычно берутся из таблицы, которая генерируется до этого шага.</p>
+				<p>Генерация таблицы происходит следующим способом:</p>
+				<p><img src="img/formula7.svg"></p>
 			</p>
 		</div>
 	</div>
@@ -59,7 +61,7 @@
 			<button id = "start" onclick="start_trainer()">Начать</button>
 
 			<div id = "trainer_inner">
-				<p>Вычислите следующий дискретный логарифм ind_	<span id = "base"></span>(<span id = "equal"></span>) in GF(<span id = "prime">5</span>)</p>
+				<p>Вычислите следующий дискретный логарифм <span style = "font-weight:bold;">ind<sub><span id = "base"></span></sub>(<span id = "equal"></span>) in GF(<span id = "prime"></span></span>)</p>
 				<p><span id = "result"></span></p>
 				<button id = "help" onclick = "Show_help()">Показать решение</button>
 			</div>
@@ -75,7 +77,7 @@
 			<p>p - 1 раскладывается на такие простые множители: <span id = "show_factors"></span></p>
 			<h2>Вычисление таблицы</h2>
 			<div id = "show_table"></div>
-			<h2>Рассматриваем каждый qi</h2>
+			<h2>Рассматриваем каждый q<sub>i</sub></h2>
 			<div id = "calcs_qs"></div>
 			<h2>Получение ответа:</h2>
 			<p>Применяя китайскую теорему об остатках, получаем ответ: <span id = "get_answer"></span></p>
