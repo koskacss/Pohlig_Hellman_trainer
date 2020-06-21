@@ -12,7 +12,7 @@ input{
 button{
 	outline:none;
 	border:none;
-	background-color: grey;
+	background-color: black;
 }
 
 button:hover{
