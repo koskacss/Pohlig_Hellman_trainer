@@ -12,10 +12,6 @@ input{
 button{
 	outline:none;
 	border:none;
-	background-color: #9c9c9c;
-}
-
-button:hover{
 	background-color: #c9c9c9;
 }
 
